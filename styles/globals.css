@@ -28,7 +28,7 @@ body {
 /* Style your items */
 .my-masonry-grid_column > * {
   /* change div to reference your elements you put in <Masonry> */
-
+  margin: auto;
   margin-bottom: 30px;
   border-radius: 15px;
 }
