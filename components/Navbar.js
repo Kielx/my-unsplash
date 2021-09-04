@@ -39,7 +39,7 @@ const Navbar = () => {
       </div>
 
       <Popover
-        className=" md:hidden  relative flex w-full  justify-between"
+        className=" md:hidden  relative flex w-full  justify-between "
         style={{ zIndex: "2" }}
       >
         <Image src={myUnsplashLogo} alt="my unsplash logo" />
@@ -71,8 +71,8 @@ const Navbar = () => {
           leaveFrom="transform scale-100 opacity-100"
           leaveTo="transform scale-95 opacity-0"
         >
-          <Popover.Panel className="absolute -bottom-60 z-10 w-full max-w-md bg-white rounded-2xl shadow-xl py-6 space-y-6 flex flex-col items-center">
-            <form className="flex items-center bg-white p-4 border border-gray-200 rounded-xl w-3/4 ml-8">
+          <Popover.Panel className="absolute right-0 -bottom-60 z-10 w-full max-w-md bg-white rounded-2xl shadow-xl py-6 space-y-6 flex flex-col items-center">
+            <form className="flex items-center bg-white p-4 border border-gray-200 rounded-xl w-3/4">
               <label htmlFor="search" className="mr-2">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
