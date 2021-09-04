@@ -1,4 +1,5 @@
 import Head from "next/head";
+import MasonryContainer from "../components/MasonryContainer";
 import Navbar from "../components/Navbar";
 
 export default function Home() {
@@ -10,6 +11,7 @@ export default function Home() {
       </Head>
 
       <Navbar />
+      <MasonryContainer />
     </div>
   );
 }
