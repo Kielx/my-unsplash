@@ -73,7 +73,12 @@ const MasonryContainer = () => {
       {files?.map((file) => (
         <div key={file.url} className="imageContainer">
           {/* eslint-disable-next-line @next/next/no-img-element*/}
-          <img src={file.url} alt="My unsplash image" />
+          <Image
+            src={file.url}
+            alt="My unsplash image"
+            width="400"
+            height="400"
+          />
           <div className="overlay">{file.metadata.name}</div>
         </div>
       ))}
