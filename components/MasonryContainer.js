@@ -14,9 +14,10 @@ const MasonryContainer = () => {
 
   useEffect(() => {
     const fetchImages = async () => {
+      let url;
       let result = await listAll(storageRef);
-      let urlPromises = result.items.map((imageRef) =>
-        getDownloadURL(imageRef)
+      let urlPromises = result.items.map(
+        (imageRef) => (url = getDownloadURL(imageRef))
       );
       return Promise.all(urlPromises);
     };
@@ -35,7 +36,12 @@ const MasonryContainer = () => {
       //for in each url, get the metadata and add it to the url
       let images = urls.map((url, index) => {
         return {
-          url: url,
+          url: url.replace(
+            "https://firebasestorage.googleapis.com",
+            `https://ik.imagekit.io/u9es71stuug/tr:${
+              window.innerWidth < 525 ? "w-515" : "w-315"
+            },c-at_min,fo-auto,q-80`
+          ),
           metadata: metadata[index],
         };
       });
@@ -67,7 +73,7 @@ const MasonryContainer = () => {
       {files?.map((file) => (
         <div key={file.url} className="imageContainer">
           {/* eslint-disable-next-line @next/next/no-img-element*/}
-          <img src={file.url} alt="My unsplash image" className="image" />
+          <img src={file.url} alt="My unsplash image" />
           <div className="overlay">{file.metadata.name}</div>
         </div>
       ))}

@@ -5,6 +5,6 @@ module.exports = {
     defaultLocale: "en-US",
   },
   images: {
-    domains: ["firebasestorage.googleapis.com"],
+    domains: ["firebasestorage.googleapis.com", "ik.imagekit.io"],
   },
 };
