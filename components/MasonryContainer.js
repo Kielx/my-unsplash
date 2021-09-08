@@ -179,6 +179,7 @@ const MasonryContainer = () => {
               <div key={file.url} className="imageContainer">
                 {/* eslint-disable-next-line @next/next/no-img-element*/}
                 <NextImage
+                  className="nextImage"
                   src={file.url}
                   alt="My unsplash image"
                   width={`${file.metadata?.customMetadata?.width || "400"}`}
