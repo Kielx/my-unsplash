@@ -1,24 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setFiles, setSelectedFile } from "../redux/filesSlice";
+import NextImage from "next/image";
 import Masonry from "react-masonry-css";
 import {
-  storageRef,
   getStorage,
+  ref,
   listAll,
   getDownloadURL,
   getMetadata,
   uploadBytesResumable,
-  ref,
-} from "../firebase/firebase";
-import NextImage from "next/image";
+} from "firebase/storage";
 
 const MasonryContainer = () => {
-  // Get all the images from Storage
-  const [files, setFiles] = useState();
-  //selected file
-  const [selectedFile, setSelectedFile] = useState();
+  //init firebase storage
+  const storage = getStorage();
+  const storageRef = ref(storage);
 
-  const upload = async (file) => {
-    // Create the file metadata
+  //Redux store
+  const files = useSelector((state) => state.files.files);
+  const selectedFile = useSelector((state) => state.files.selectedFile);
+  const dispatch = useDispatch();
+
+  //Upload file handler function
+  const uploadHandler = async (file) => {
+    // Create the file metadata with custom metadata and contentType
     /** @type {any} */
     const metadata = {
       contentType: "image/*",
@@ -32,14 +38,11 @@ const MasonryContainer = () => {
     const myImage = new Image();
     myImage.src = window.URL.createObjectURL(file);
     myImage.onload = function () {
-      const width = myImage.naturalWidth;
-      const height = myImage.naturalHeight;
-      metadata.customMetadata.width = width;
-      metadata.customMetadata.height = height;
+      metadata.customMetadata.width = myImage.naturalWidth;
+      metadata.customMetadata.height = myImage.naturalHeight;
       window.URL.revokeObjectURL(myImage.src);
-      console.log(width, height);
-      // Upload file and metadata to the object 'images/mountains.jpg'
-      const storage = getStorage();
+      // Upload file and metadata to the object with name 'file name'
+
       const storageRef = ref(storage, `/${file.name}`);
       const uploadTask = uploadBytesResumable(storageRef, file, metadata);
 
@@ -98,6 +101,7 @@ const MasonryContainer = () => {
   };
 
   useEffect(() => {
+    //get all files from firebase storage
     const fetchImages = async () => {
       let url;
       let result = await listAll(storageRef);
@@ -107,6 +111,7 @@ const MasonryContainer = () => {
       return Promise.all(urlPromises);
     };
 
+    //get all files metadata from firebase storage
     const fetchMetadata = async () => {
       let result = await listAll(storageRef);
       let metadataPromises = result.items.map((imageRef) =>
@@ -115,10 +120,11 @@ const MasonryContainer = () => {
       return Promise.all(metadataPromises);
     };
 
+    //main imageloading function
     const loadImages = async () => {
       const urls = await fetchImages();
       const metadata = await fetchMetadata();
-      //for in each url, get the metadata and add it to the url
+      //maps all fetched urls and metadata to redux store
       let images = urls.map((url, index) => {
         return {
           url: url.replace(
@@ -135,13 +141,13 @@ const MasonryContainer = () => {
         };
       });
       images.sort(
-        (a, b) => new Date(b.metadata.updated) - new Date(a.metadata.updated)
+        (a, b) =>
+          new Date(b?.metadata?.updated) - new Date(a?.metadata?.updated)
       );
-      setFiles(images);
+      dispatch(setFiles(images));
     };
     loadImages();
-  }, []);
-  console.log(files);
+  }, [dispatch, storageRef]);
 
   //Masonry breakpoint columns object for different screen sizes
   const breakpointColumnsObj = {
@@ -157,13 +163,13 @@ const MasonryContainer = () => {
         <input
           type="file"
           accept="image/*"
-          onChange={(e) => setSelectedFile(e.target.files[0])}
+          onChange={(e) => dispatch(setSelectedFile(e.target.files[0]))}
         ></input>
         <button
           type="submit"
           onClick={(e) => {
             e.preventDefault();
-            upload(selectedFile);
+            uploadHandler(selectedFile);
           }}
         >
           Upload file
@@ -174,26 +180,21 @@ const MasonryContainer = () => {
         className="my-masonry-grid pt-10"
         columnClassName="my-masonry-grid_column"
       >
-        {files?.map(
-          (file) => (
-            console.log(file),
-            (
-              <div key={file.url} className="imageContainer">
-                {/* eslint-disable-next-line @next/next/no-img-element*/}
-                <NextImage
-                  className="nextImage shadow-sm"
-                  src={file.url}
-                  alt="My unsplash image"
-                  placeholder="blur"
-                  blurDataURL={file.blur}
-                  width={`${file.metadata?.customMetadata?.width || "500"}`}
-                  height={`${file.metadata?.customMetadata?.height || "500"}`}
-                />
-                <div className="overlay">{file.metadata.name}</div>
-              </div>
-            )
-          )
-        )}
+        {files?.map((file) => (
+          <div key={file.url} className="imageContainer">
+            {/* eslint-disable-next-line @next/next/no-img-element*/}
+            <NextImage
+              className="nextImage shadow-sm"
+              src={file.url}
+              alt="My unsplash image"
+              placeholder="blur"
+              blurDataURL={file.blur}
+              width={`${file.metadata?.customMetadata?.width || "500"}`}
+              height={`${file.metadata?.customMetadata?.height || "500"}`}
+            />
+            <div className="overlay">{file?.metadata?.name}</div>
+          </div>
+        ))}
       </Masonry>
     </>
   );
