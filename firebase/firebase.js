@@ -8,6 +8,7 @@ import {
   listAll,
   getDownloadURL,
   getMetadata,
+  uploadBytesResumable,
 } from "firebase/storage";
 
 // Your web app's Firebase configuration
@@ -31,4 +32,13 @@ const storage = getStorage();
 // Points to the root reference
 const storageRef = ref(storage);
 
-export { firebase, storageRef, listAll, getDownloadURL, getMetadata };
+export {
+  firebase,
+  getStorage,
+  storageRef,
+  listAll,
+  getDownloadURL,
+  getMetadata,
+  uploadBytesResumable,
+  ref,
+};
