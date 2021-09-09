@@ -127,6 +127,10 @@ const MasonryContainer = () => {
               window.innerWidth < 525 ? "w-515" : "w-315"
             },c-at_min,fo-auto,q-80`
           ),
+          blur: url.replace(
+            "https://firebasestorage.googleapis.com",
+            `https://ik.imagekit.io/u9es71stuug/tr:w-10,h-10,q-10,bl-50`
+          ),
           metadata: metadata[index],
         };
       });
@@ -179,9 +183,11 @@ const MasonryContainer = () => {
               <div key={file.url} className="imageContainer">
                 {/* eslint-disable-next-line @next/next/no-img-element*/}
                 <NextImage
-                  className="nextImage"
+                  className="nextImage shadow-md"
                   src={file.url}
                   alt="My unsplash image"
+                  placeholder="blur"
+                  blurDataURL={file.blur}
                   width={`${file.metadata?.customMetadata?.width || "400"}`}
                   height={`${file.metadata?.customMetadata?.height || "400"}`}
                 />
