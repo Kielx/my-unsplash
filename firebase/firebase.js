@@ -2,14 +2,6 @@
 import { initializeApp } from "firebase/app";
 // Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-import {
-  getStorage,
-  ref,
-  listAll,
-  getDownloadURL,
-  getMetadata,
-  uploadBytesResumable,
-} from "firebase/storage";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -26,19 +18,4 @@ const firebase = initializeApp(firebaseConfig);
 
 //MainFirebase END
 
-//Storage
-
-const storage = getStorage();
-// Points to the root reference
-const storageRef = ref(storage);
-
-export {
-  firebase,
-  getStorage,
-  storageRef,
-  listAll,
-  getDownloadURL,
-  getMetadata,
-  uploadBytesResumable,
-  ref,
-};
+export { firebase };
