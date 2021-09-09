@@ -124,7 +124,7 @@ const MasonryContainer = () => {
           url: url.replace(
             "https://firebasestorage.googleapis.com",
             `https://ik.imagekit.io/u9es71stuug/tr:${
-              window.innerWidth < 525 ? "w-515" : "w-315"
+              window.innerWidth < 525 ? "w-515" : "w-437"
             },c-at_min,fo-auto,q-80`
           ),
           blur: url.replace(
@@ -146,8 +146,6 @@ const MasonryContainer = () => {
   //Masonry breakpoint columns object for different screen sizes
   const breakpointColumnsObj = {
     default: 3,
-    2200: 5,
-    1600: 4,
     1100: 3,
     700: 2,
     500: 1,
@@ -183,13 +181,13 @@ const MasonryContainer = () => {
               <div key={file.url} className="imageContainer">
                 {/* eslint-disable-next-line @next/next/no-img-element*/}
                 <NextImage
-                  className="nextImage shadow-md"
+                  className="nextImage shadow-sm"
                   src={file.url}
                   alt="My unsplash image"
                   placeholder="blur"
                   blurDataURL={file.blur}
-                  width={`${file.metadata?.customMetadata?.width || "400"}`}
-                  height={`${file.metadata?.customMetadata?.height || "400"}`}
+                  width={`${file.metadata?.customMetadata?.width || "500"}`}
+                  height={`${file.metadata?.customMetadata?.height || "500"}`}
                 />
                 <div className="overlay">{file.metadata.name}</div>
               </div>
