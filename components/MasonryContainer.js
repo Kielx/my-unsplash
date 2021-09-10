@@ -14,14 +14,14 @@ import {
 
 const MasonryContainer = () => {
   //init firebase storage
-  const storage = getStorage();
-  const storageRef = ref(storage);
 
   //Redux store
   const dispatch = useDispatch();
   const files = useSelector((state) => state.files.files);
 
   useEffect(() => {
+    const storage = getStorage();
+    const storageRef = ref(storage);
     //get all files from firebase storage
     const fetchImages = async () => {
       let url;
@@ -68,7 +68,7 @@ const MasonryContainer = () => {
       dispatch(setFiles(images));
     };
     loadImages();
-  }, [dispatch, storageRef]);
+  }, [dispatch]);
 
   //Masonry breakpoint columns object for different screen sizes
   const breakpointColumnsObj = {
