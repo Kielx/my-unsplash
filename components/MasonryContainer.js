@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setFiles } from "../redux/filesSlice";
+import { setFiles, removeFile } from "../redux/filesSlice";
 import NextImage from "next/image";
 import Masonry from "react-masonry-css";
 
@@ -10,16 +10,17 @@ import {
   listAll,
   getDownloadURL,
   getMetadata,
+  deleteObject,
 } from "firebase/storage";
 
 const MasonryContainer = () => {
-  //init firebase storage
-
+  const [masonryFiles, setMasonryFiles] = useState(null);
   //Redux store
   const dispatch = useDispatch();
   const files = useSelector((state) => state.files.files);
 
   useEffect(() => {
+    //init firebase storage
     const storage = getStorage();
     const storageRef = ref(storage);
     //get all files from firebase storage
@@ -70,6 +71,51 @@ const MasonryContainer = () => {
     loadImages();
   }, [dispatch]);
 
+  //Map files
+  useEffect(() => {
+    {
+      setMasonryFiles(
+        files?.map((file) => (
+          <div key={file.url} className="imageContainer">
+            {/* eslint-disable-next-line @next/next/no-img-element*/}
+            <NextImage
+              className="nextImage shadow-sm"
+              src={file.url}
+              alt="My unsplash image"
+              placeholder="blur"
+              blurDataURL={file.blur}
+              width={`${file.metadata?.customMetadata?.width || "500"}`}
+              height={`${file.metadata?.customMetadata?.height || "500"}`}
+            />
+            <div className="overlay">
+              {file?.metadata?.name}
+              <button
+                onClick={() => {
+                  const storage = getStorage();
+
+                  // Create a reference to the file to delete
+                  const deleteRef = ref(storage, `${file?.metadata?.name}`);
+
+                  // Delete the file
+                  deleteObject(deleteRef)
+                    .then(() => {
+                      //remove file from
+                      dispatch(removeFile(file));
+                    })
+                    .catch((error) => {
+                      // Uh-oh, an error occurred!
+                    });
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        ))
+      );
+    }
+  }, [dispatch, files]);
+
   //Masonry breakpoint columns object for different screen sizes
   const breakpointColumnsObj = {
     default: 3,
@@ -84,21 +130,7 @@ const MasonryContainer = () => {
       className="my-masonry-grid pt-10"
       columnClassName="my-masonry-grid_column"
     >
-      {files?.map((file) => (
-        <div key={file.url} className="imageContainer">
-          {/* eslint-disable-next-line @next/next/no-img-element*/}
-          <NextImage
-            className="nextImage shadow-sm"
-            src={file.url}
-            alt="My unsplash image"
-            placeholder="blur"
-            blurDataURL={file.blur}
-            width={`${file.metadata?.customMetadata?.width || "500"}`}
-            height={`${file.metadata?.customMetadata?.height || "500"}`}
-          />
-          <div className="overlay">{file?.metadata?.name}</div>
-        </div>
-      ))}
+      {masonryFiles}
     </Masonry>
   );
 };

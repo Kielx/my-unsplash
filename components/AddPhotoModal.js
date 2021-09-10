@@ -1,22 +1,28 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Dialog } from "@headlessui/react";
 import { useSelector, useDispatch } from "react-redux";
 import { setIsOpen } from "../redux/modalSlice";
-import { setSelectedFile, setSelectedFileLabel } from "../redux/filesSlice";
+import { addFile } from "../redux/filesSlice";
 
-import { ref, uploadBytesResumable, getStorage } from "firebase/storage";
+import {
+  ref,
+  uploadBytesResumable,
+  getStorage,
+  getDownloadURL,
+  getMetadata,
+} from "firebase/storage";
 
 const AddPhotoModal = () => {
   //Redux store
   const dispatch = useDispatch();
+
+  const [file, setFile] = useState(null);
+  const [fileLabel, setFileLabel] = useState("");
+
   const isOpen = useSelector((state) => state.modal.isOpen);
-  const selectedFile = useSelector((state) => state.files.selectedFile);
-  const selectedFileLabel = useSelector(
-    (state) => state.files.selectedFileLabel
-  );
 
   const storage = getStorage();
-  const storageRef = ref(storage, `/${selectedFileLabel}`);
+  const storageRef = ref(storage, `/${fileLabel}`);
 
   //Upload file handler function
   const uploadHandler = async (file) => {
@@ -89,18 +95,38 @@ const AddPhotoModal = () => {
           // Upload completed successfully, now we can get the download URL
           //dispatch(setLoading(false));
           //dispatch(setLoaded(true));
-          //getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
-          // dispatch(setDownloadURL(downloadURL))
-          //);
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            dispatch(
+              addFile({
+                url: downloadURL.replace(
+                  "https://firebasestorage.googleapis.com",
+                  `https://ik.imagekit.io/u9es71stuug/tr:${
+                    window.innerWidth < 525 ? "w-515" : "w-437"
+                  },c-at_min,fo-auto,q-80`
+                ),
+                blur: downloadURL.replace(
+                  "https://firebasestorage.googleapis.com",
+                  `https://ik.imagekit.io/u9es71stuug/tr:w-10,h-10,q-10,bl-50`
+                ),
+                metadata: {
+                  name: fileLabel,
+                  customMetadata: {
+                    width: metadata.customMetadata.width,
+                    height: metadata.customMetadata.height,
+                  },
+                },
+              })
+            );
+          });
         }
       );
     };
   };
 
   useEffect(() => {
-    dispatch(setSelectedFileLabel(null));
-    dispatch(setSelectedFile(null));
-  }, [dispatch, isOpen]);
+    setFile(null);
+    setFileLabel(null);
+  }, [isOpen]);
 
   return (
     <Dialog
@@ -126,13 +152,13 @@ const AddPhotoModal = () => {
               id="label"
               placeholder="Enter label for your photo"
               className="w-full text-gray-700 text-xs px-3 py-3 border border-black border-opacity-50 rounded-xl mb-5"
-              onChange={(e) => dispatch(setSelectedFileLabel(e.target.value))}
+              onChange={(e) => setFileLabel(e.target.value)}
               required={true}
             ></input>
             <input
               type="file"
               accept="image/*"
-              onChange={(e) => dispatch(setSelectedFile(e.target.files[0]))}
+              onChange={(e) => setFile(e.target.files[0])}
               required={true}
             ></input>
             <div className="flex place-content-end space-x-4">
@@ -150,9 +176,7 @@ const AddPhotoModal = () => {
                 type="submit"
                 onClick={(e) => {
                   e.preventDefault();
-                  selectedFile &&
-                    selectedFileLabel &&
-                    uploadHandler(selectedFile);
+                  file && fileLabel && uploadHandler(file);
                 }}
                 className="p-4 bg-green-500 text-white text-center rounded-xl font-bold text-base shadow-md"
               >
