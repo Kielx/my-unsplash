@@ -2,8 +2,12 @@ import React from "react";
 import Image from "next/image";
 import myUnsplashLogo from "../public/my_unsplash_logo.svg";
 import { Popover, Transition } from "@headlessui/react";
+import { useDispatch } from "react-redux";
+import { setIsOpen } from "../redux/modalSlice";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+
   return (
     <>
       <div className="hidden w-full h-24 md:flex items-center">
@@ -33,7 +37,10 @@ const Navbar = () => {
             className="w-full text-gray-700"
           ></input>
         </form>
-        <button className="ml-auto p-4 bg-green-500 text-white text-center rounded-xl font-bold text-base">
+        <button
+          onClick={() => dispatch(setIsOpen(true))}
+          className="ml-auto p-4 bg-green-500 text-white text-center rounded-xl font-bold text-base shadow-md"
+        >
           Add a photo
         </button>
       </div>
@@ -97,7 +104,10 @@ const Navbar = () => {
                 className="w-full text-gray-700"
               ></input>
             </form>
-            <button className="p-4 bg-green-500 text-white text-center rounded-xl font-bold text-base">
+            <button
+              onClick={() => dispatch(setIsOpen(true))}
+              className="p-4 bg-green-500 text-white text-center rounded-xl font-bold text-base"
+            >
               Add a photo
             </button>
           </Popover.Panel>

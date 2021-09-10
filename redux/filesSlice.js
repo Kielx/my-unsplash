@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   files: null,
-  selectedFile: null,
 };
 
 export const filesSlice = createSlice({
@@ -16,13 +15,18 @@ export const filesSlice = createSlice({
       // immutable state based off those changes
       state.files = action.payload;
     },
-    setSelectedFile: (state, action) => {
-      state.selectedFile = action.payload;
+    addFile: (state, action) => {
+      state.files.unshift(action.payload);
+    },
+    removeFile: (state, action) => {
+      state.files = state.files.filter((currentFile) => {
+        return currentFile.metadata.name !== action.payload.metadata.name;
+      });
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setFiles, setSelectedFile } = filesSlice.actions;
+export const { setFiles, addFile, removeFile } = filesSlice.actions;
 
 export default filesSlice.reducer;
