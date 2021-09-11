@@ -61,6 +61,7 @@ const MasonryContainer = () => {
       result.items.map((imageRef) => getMetadata(imageRef))
     );
     //Map files for later use
+    //TODO: Update fetched file sizes
     const images = urls.map((url, index) => ({
       url: url.replace(
         "https://firebasestorage.googleapis.com",
@@ -170,7 +171,7 @@ const MasonryContainer = () => {
       <Masonry
         breakpointCols={breakpointColumnsObj}
         id="masonry"
-        className="my-masonry-grid pt-10"
+        className="my-masonry-grid pt-10 px-5"
         columnClassName="my-masonry-grid_column"
       >
         {masonryFiles}
