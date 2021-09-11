@@ -3,7 +3,7 @@ import Image from "next/image";
 import myUnsplashLogo from "../public/my_unsplash_logo.svg";
 import { Popover, Transition } from "@headlessui/react";
 import { useDispatch } from "react-redux";
-import { setIsOpen } from "../redux/modalSlice";
+import { setIsAddOpen } from "../redux/modalSlice";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -38,7 +38,7 @@ const Navbar = () => {
           ></input>
         </form>
         <button
-          onClick={() => dispatch(setIsOpen(true))}
+          onClick={() => dispatch(setIsAddOpen(true))}
           className="btn-primary ml-auto ripple "
         >
           Add a photo
@@ -105,7 +105,7 @@ const Navbar = () => {
               ></input>
             </form>
             <button
-              onClick={() => dispatch(setIsOpen(true))}
+              onClick={() => dispatch(setIsAddOpen(true))}
               className="btn-primary ripple"
             >
               Add a photo

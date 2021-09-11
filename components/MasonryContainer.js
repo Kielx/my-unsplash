@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setFiles, removeFile } from "../redux/filesSlice";
+import { setIsDeleteOpen } from "../redux/modalSlice";
+import DeletePhotoModal from "../components/DeletePhotoModal";
 import NextImage from "next/image";
 import Masonry from "react-masonry-css";
 
@@ -89,22 +91,24 @@ const MasonryContainer = () => {
             />
             <div className="font-montserrat overlay flex flex-col place-content-between p-4">
               <button
-                className="font-medium transition-all ml-auto border-2 border-red-600 text-red-600 p-2 rounded-xl hover:bg-red-700 hover:text-white"
+                className="ml-auto btn-danger"
                 onClick={() => {
                   const storage = getStorage();
 
                   // Create a reference to the file to delete
                   const deleteRef = ref(storage, `${file?.metadata?.name}`);
-
                   // Delete the file
-                  deleteObject(deleteRef)
-                    .then(() => {
-                      //remove file from
-                      dispatch(removeFile(file));
-                    })
-                    .catch((error) => {
-                      // Uh-oh, an error occurred!
-                    });
+                  const del = () => {
+                    deleteObject(deleteRef)
+                      .then(() => {
+                        //remove file from
+                        dispatch(removeFile(file));
+                      })
+                      .catch((error) => {
+                        // Uh-oh, an error occurred!
+                      });
+                  };
+                  dispatch(setIsDeleteOpen([true, del, file?.metadata?.name]));
                 }}
               >
                 Delete

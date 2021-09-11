@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Dialog } from "@headlessui/react";
 import { useSelector, useDispatch } from "react-redux";
-import { setIsOpen } from "../redux/modalSlice";
+import { setIsAddOpen } from "../redux/modalSlice";
 import { addFile } from "../redux/filesSlice";
 
 import {
@@ -19,7 +19,7 @@ const AddPhotoModal = () => {
   const [file, setFile] = useState(null);
   const [fileLabel, setFileLabel] = useState("");
 
-  const isOpen = useSelector((state) => state.modal.isOpen);
+  const isAddOpen = useSelector((state) => state.modal.isAddOpen);
 
   const storage = getStorage();
   const storageRef = ref(storage, `/${fileLabel}`);
@@ -127,12 +127,12 @@ const AddPhotoModal = () => {
   useEffect(() => {
     setFile(null);
     setFileLabel(null);
-  }, [isOpen]);
+  }, [isAddOpen]);
 
   return (
     <Dialog
-      open={isOpen}
-      onClose={() => dispatch(setIsOpen(false))}
+      open={isAddOpen}
+      onClose={() => dispatch(setIsAddOpen(false))}
       className="fixed z-10 inset-0 overflow-y-auto"
     >
       <div className="flex items-center justify-center min-h-screen">
@@ -167,7 +167,7 @@ const AddPhotoModal = () => {
                 type="submit"
                 onClick={(e) => {
                   e.preventDefault();
-                  dispatch(setIsOpen(false));
+                  dispatch(setIsAddOpen(false));
                 }}
                 className="p-4 bg-transparent text-gray-400 text-center rounded-xl text-base"
               >
