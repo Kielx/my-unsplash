@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import NextImage from "next/image";
+import Masonry from "react-masonry-css";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { useSelector, useDispatch } from "react-redux";
 import { removeFile, addFiles } from "../redux/filesSlice";
 import {
@@ -6,10 +9,6 @@ import {
   setDeleteFileName,
   setRemoveFunction,
 } from "../redux/modalSlice";
-import NextImage from "next/image";
-import Masonry from "react-masonry-css";
-import InfiniteScroll from "react-infinite-scroll-component";
-
 import {
   getStorage,
   ref,
@@ -20,6 +19,7 @@ import {
 } from "firebase/storage";
 
 const MasonryContainer = () => {
+  //Masonry files contains all the mapped files that should be displayed
   const [masonryFiles, setMasonryFiles] = useState(null);
   //Redux store
   const dispatch = useDispatch();
@@ -28,33 +28,39 @@ const MasonryContainer = () => {
   //init firebase storage
   const storage = getStorage();
   const storageRef = ref(storage);
+  //Pagetoken for the next page of files returned by list function
+  //First page token is null. On first fetch it is set to the token of the first page
+  //On subsequent fetches it is set to the token of the next page
+  //This is used to fetch the next page of files
+  //When there are no more files to fetch, the token is set to undefined
+  //When it is undefined the fetch function returns nothing
+  //Infinite scroll uses it to know when to fetch more files and when to display end message
   const [pageToken, setPageToken] = useState(null);
 
-  //get all files from firebase storage
+  //get files from firebase storage
   const fetchImages = async (pageToken) => {
     let url;
     let result;
     if (pageToken) {
       result = await list(storageRef, {
-        maxResults: 3,
+        maxResults: 6,
         pageToken,
       });
-      console.log(result.nextPageToken);
       setPageToken(result.nextPageToken);
     } else if (pageToken === null) {
-      result = await list(storageRef, { maxResults: 3 });
+      result = await list(storageRef, { maxResults: 6 });
       setPageToken(result.nextPageToken);
     } else {
       return;
     }
-
+    //For each file in the result, get the download url and metadata
     const urls = await Promise.all(
       result.items.map((imageRef) => (url = getDownloadURL(imageRef)))
     );
     const metadata = await Promise.all(
       result.items.map((imageRef) => getMetadata(imageRef))
     );
-
+    //Map files for later use
     const images = urls.map((url, index) => ({
       url: url.replace(
         "https://firebasestorage.googleapis.com",
@@ -71,11 +77,12 @@ const MasonryContainer = () => {
       updated: metadata[index].updated,
       customMetadata: metadata[index].customMetadata,
     }));
-    console.log(images);
+    //Add files to redux store
     dispatch(addFiles(images));
   };
 
   useEffect(() => {
+    //First images fetch on page load
     fetchImages(pageToken);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -88,6 +95,10 @@ const MasonryContainer = () => {
       //Then map the array to a jsx element
       //const newFiles = Array.from(files);
       //newFiles.sort((a, b) => new Date(a?.updated) - new Date(b?.updated));
+      //usable in case of listing all files, not so much with pagination and infinite scroll
+      //Left in for future eventual use
+
+      //Map each file to a jsx element
       setMasonryFiles(
         files?.map((file) => (
           <div key={file.url} className="imageContainer">
@@ -120,6 +131,7 @@ const MasonryContainer = () => {
                         // Uh-oh, an error occurred!
                       });
                   };
+                  //Send data to modal to be displayed
                   dispatch(setIsDeleteOpen(true));
                   dispatch(setDeleteFileName(file?.name));
                   dispatch(setRemoveFunction(del));
@@ -148,9 +160,9 @@ const MasonryContainer = () => {
       dataLength={files.length}
       next={() => fetchImages(pageToken)}
       hasMore={pageToken === undefined ? false : true}
-      loader={<h4>Loading...</h4>}
+      loader={<p className="text-center text-2xl">Loading...</p>}
       endMessage={
-        <p style={{ textAlign: "center" }}>
+        <p className="text-center text-2xl">
           <b>Yay! You have seen it all</b>
         </p>
       }
