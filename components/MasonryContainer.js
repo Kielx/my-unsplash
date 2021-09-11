@@ -87,9 +87,9 @@ const MasonryContainer = () => {
               width={`${file.metadata?.customMetadata?.width || "500"}`}
               height={`${file.metadata?.customMetadata?.height || "500"}`}
             />
-            <div className="overlay flex flex-col place-content-between p-4">
+            <div className="font-montserrat overlay flex flex-col place-content-between p-4">
               <button
-                className="transition-all ml-auto border-2 border-red-600 text-red-500 p-1 rounded-xl hover:bg-red-500 hover:text-white"
+                className="font-medium transition-all ml-auto border-2 border-red-600 text-red-600 p-2 rounded-xl hover:bg-red-700 hover:text-white"
                 onClick={() => {
                   const storage = getStorage();
 
