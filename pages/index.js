@@ -1,6 +1,7 @@
 import Head from "next/head";
 import MasonryContainer from "../components/MasonryContainer";
 import AddPhotoModal from "../components/AddPhotoModal";
+import DeletePhotoModal from "../components/DeletePhotoModal";
 import Navbar from "../components/Navbar";
 import { store } from "../redux/store";
 import { Provider } from "react-redux";
@@ -15,7 +16,8 @@ export default function Home() {
         </Head>
 
         <Navbar />
-        <AddPhotoModal isOpen={false} />
+        <AddPhotoModal />
+        <DeletePhotoModal />
         <MasonryContainer />
       </div>
     </Provider>
