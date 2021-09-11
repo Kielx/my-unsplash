@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setFiles, removeFile } from "../redux/filesSlice";
-import { setIsDeleteOpen } from "../redux/modalSlice";
+import {
+  setIsDeleteOpen,
+  setDeleteFileName,
+  setRemoveFunction,
+} from "../redux/modalSlice";
 import DeletePhotoModal from "../components/DeletePhotoModal";
 import NextImage from "next/image";
 import Masonry from "react-masonry-css";
@@ -108,7 +112,9 @@ const MasonryContainer = () => {
                         // Uh-oh, an error occurred!
                       });
                   };
-                  dispatch(setIsDeleteOpen([true, del, file?.metadata?.name]));
+                  dispatch(setIsDeleteOpen(true));
+                  dispatch(setDeleteFileName(file?.metadata?.name));
+                  dispatch(setRemoveFunction(del));
                 }}
               >
                 Delete

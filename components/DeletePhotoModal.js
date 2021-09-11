@@ -7,11 +7,13 @@ const DeletePhotoModal = () => {
   const [confirm, setConfirm] = useState(null);
   const dispatch = useDispatch();
   const isDeleteOpen = useSelector((state) => state.modal.isDeleteOpen);
+  const deleteFileName = useSelector((state) => state.modal.deleteFileName);
+  const removeFunction = useSelector((state) => state.modal.removeFunction);
 
   return (
     <Dialog
-      open={isDeleteOpen[0]}
-      onClose={() => dispatch(setIsDeleteOpen([false]))}
+      open={isDeleteOpen}
+      onClose={() => dispatch(setIsDeleteOpen(false))}
       className="fixed z-10 inset-0 overflow-y-auto"
     >
       <div className="flex items-center justify-center min-h-screen">
@@ -32,14 +34,14 @@ const DeletePhotoModal = () => {
                 </span>
                 <span className="whitespace-pre">Please type in </span>
                 <span className="font-extrabold underline ">
-                  {`${isDeleteOpen[2]}`}
+                  {`${deleteFileName}`}
                 </span>
                 <span className="whitespace-pre"> to continue</span>
               </div>
             </label>
             <input
               id="confirm"
-              placeholder={isDeleteOpen[2]}
+              placeholder={deleteFileName}
               className="w-full text-gray-700 text-xs px-3 py-3 border border-black border-opacity-50 rounded-xl mb-5"
               required={true}
               onChange={(e) => setConfirm(e.target.value)}
@@ -49,7 +51,7 @@ const DeletePhotoModal = () => {
                 type="submit"
                 onClick={(e) => {
                   e.preventDefault();
-                  dispatch(setIsDeleteOpen([false]));
+                  dispatch(setIsDeleteOpen(false));
                 }}
                 className="p-4 bg-transparent text-gray-400 text-center rounded-xl text-base"
               >
@@ -59,8 +61,9 @@ const DeletePhotoModal = () => {
                 type="submit"
                 onClick={(e) => {
                   e.preventDefault();
-                  if (confirm === isDeleteOpen[2]) {
-                    isDeleteOpen[1]();
+                  if (confirm === deleteFileName) {
+                    removeFunction();
+                    dispatch(setIsDeleteOpen(false));
                   }
                 }}
                 className="btn-danger ripple"

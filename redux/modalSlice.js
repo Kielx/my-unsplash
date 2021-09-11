@@ -2,7 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isAddOpen: false,
-  isDeleteOpen: [false],
+  isDeleteOpen: false,
+  deleteFileName: null,
+  removeFunction: null,
 };
 
 export const modalSlice = createSlice({
@@ -19,10 +21,21 @@ export const modalSlice = createSlice({
     setIsDeleteOpen: (state, action) => {
       state.isDeleteOpen = action.payload;
     },
+    setDeleteFileName: (state, action) => {
+      state.deleteFileName = action.payload;
+    },
+    setRemoveFunction: (state, action) => {
+      state.removeFunction = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setIsAddOpen, setIsDeleteOpen } = modalSlice.actions;
+export const {
+  setIsAddOpen,
+  setIsDeleteOpen,
+  setDeleteFileName,
+  setRemoveFunction,
+} = modalSlice.actions;
 
 export default modalSlice.reducer;
