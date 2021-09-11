@@ -1,14 +1,14 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setFiles, removeFile, addFiles } from "../redux/filesSlice";
+import { removeFile, addFiles } from "../redux/filesSlice";
 import {
   setIsDeleteOpen,
   setDeleteFileName,
   setRemoveFunction,
 } from "../redux/modalSlice";
-import DeletePhotoModal from "../components/DeletePhotoModal";
 import NextImage from "next/image";
 import Masonry from "react-masonry-css";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 import {
   getStorage,
@@ -77,6 +77,7 @@ const MasonryContainer = () => {
 
   useEffect(() => {
     fetchImages(pageToken);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   //Map files
@@ -85,10 +86,10 @@ const MasonryContainer = () => {
       //First create a copy of files array
       //Then sort the array by date
       //Then map the array to a jsx element
-      const newFiles = Array.from(files);
-      newFiles.sort((a, b) => new Date(b?.updated) - new Date(a?.updated));
+      //const newFiles = Array.from(files);
+      //newFiles.sort((a, b) => new Date(a?.updated) - new Date(b?.updated));
       setMasonryFiles(
-        newFiles?.map((file) => (
+        files?.map((file) => (
           <div key={file.url} className="imageContainer">
             {/* eslint-disable-next-line @next/next/no-img-element*/}
             <NextImage
@@ -143,16 +144,26 @@ const MasonryContainer = () => {
   };
 
   return (
-    <>
-      <button onClick={() => fetchImages(pageToken)}>Load more</button>
+    <InfiniteScroll
+      dataLength={files.length}
+      next={() => fetchImages(pageToken)}
+      hasMore={pageToken === undefined ? false : true}
+      loader={<h4>Loading...</h4>}
+      endMessage={
+        <p style={{ textAlign: "center" }}>
+          <b>Yay! You have seen it all</b>
+        </p>
+      }
+    >
       <Masonry
         breakpointCols={breakpointColumnsObj}
+        id="masonry"
         className="my-masonry-grid pt-10"
         columnClassName="my-masonry-grid_column"
       >
         {masonryFiles}
       </Masonry>
-    </>
+    </InfiniteScroll>
   );
 };
 
