@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  files: null,
+  files: [],
 };
 
 export const filesSlice = createSlice({
@@ -18,6 +18,9 @@ export const filesSlice = createSlice({
     addFile: (state, action) => {
       state.files.unshift(action.payload);
     },
+    addFiles: (state, action) => {
+      state.files.unshift(...action.payload);
+    },
     removeFile: (state, action) => {
       state.files = state.files.filter((currentFile) => {
         return currentFile.name !== action.payload.name;
@@ -27,6 +30,6 @@ export const filesSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setFiles, addFile, removeFile } = filesSlice.actions;
+export const { setFiles, addFile, addFiles, removeFile } = filesSlice.actions;
 
 export default filesSlice.reducer;

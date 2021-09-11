@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setFiles, removeFile } from "../redux/filesSlice";
+import { setFiles, removeFile, addFiles } from "../redux/filesSlice";
 import {
   setIsDeleteOpen,
   setDeleteFileName,
@@ -13,7 +13,7 @@ import Masonry from "react-masonry-css";
 import {
   getStorage,
   ref,
-  listAll,
+  list,
   getDownloadURL,
   getMetadata,
   deleteObject,
@@ -25,49 +25,70 @@ const MasonryContainer = () => {
   const dispatch = useDispatch();
   const files = useSelector((state) => state.files.files);
 
-  useEffect(() => {
-    //init firebase storage
-    const storage = getStorage();
-    const storageRef = ref(storage);
-    //get all files from firebase storage
-    const fetchImages = async () => {
-      let url;
-      let result = await listAll(storageRef);
-      const urls = await Promise.all(
-        result.items.map((imageRef) => (url = getDownloadURL(imageRef)))
-      );
-      const metadata = await Promise.all(
-        result.items.map((imageRef) => getMetadata(imageRef))
-      );
-      console.log(urls, metadata, images);
-      const images = urls.map((url, index) => ({
-        url: url.replace(
-          "https://firebasestorage.googleapis.com",
-          `https://ik.imagekit.io/u9es71stuug/tr:${
-            window.innerWidth < 525 ? "w-515" : "w-437"
-          },c-at_min,fo-auto,q-80`
-        ),
-        blur: url.replace(
-          "https://firebasestorage.googleapis.com",
-          `https://ik.imagekit.io/u9es71stuug/tr:w-2,h-2,q-2,bl-90`
-        ),
-        name: metadata[index].name,
-        size: metadata[index].size,
-        updated: metadata[index].updated,
-        customMetadata: metadata[index].customMetadata,
-      }));
+  //init firebase storage
+  const storage = getStorage();
+  const storageRef = ref(storage);
+  const [pageToken, setPageToken] = useState(null);
 
-      images.sort((a, b) => new Date(b?.updated) - new Date(a?.updated));
-      dispatch(setFiles(images));
-    };
-    fetchImages();
-  }, [dispatch]);
+  //get all files from firebase storage
+  const fetchImages = async (pageToken) => {
+    let url;
+    let result;
+    if (pageToken) {
+      result = await list(storageRef, {
+        maxResults: 3,
+        pageToken,
+      });
+      console.log(result.nextPageToken);
+      setPageToken(result.nextPageToken);
+    } else if (pageToken === null) {
+      result = await list(storageRef, { maxResults: 3 });
+      setPageToken(result.nextPageToken);
+    } else {
+      return;
+    }
+
+    const urls = await Promise.all(
+      result.items.map((imageRef) => (url = getDownloadURL(imageRef)))
+    );
+    const metadata = await Promise.all(
+      result.items.map((imageRef) => getMetadata(imageRef))
+    );
+
+    const images = urls.map((url, index) => ({
+      url: url.replace(
+        "https://firebasestorage.googleapis.com",
+        `https://ik.imagekit.io/u9es71stuug/tr:${
+          window.innerWidth < 525 ? "w-515" : "w-437"
+        },c-at_min,fo-auto,q-80`
+      ),
+      blur: url.replace(
+        "https://firebasestorage.googleapis.com",
+        `https://ik.imagekit.io/u9es71stuug/tr:w-2,h-2,q-2,bl-90`
+      ),
+      name: metadata[index].name,
+      size: metadata[index].size,
+      updated: metadata[index].updated,
+      customMetadata: metadata[index].customMetadata,
+    }));
+    console.log(images);
+    dispatch(addFiles(images));
+  };
+
+  useEffect(() => {
+    fetchImages(pageToken);
+  }, []);
 
   //Map files
   useEffect(() => {
     {
+      //First create a copy of files array
+      //Then sort the array by date
+      //Then map the array to a jsx element
+      const newFiles = Array.from(files);
+      newFiles.sort((a, b) => new Date(b?.updated) - new Date(a?.updated));
       setMasonryFiles(
-        files?.map((file) => (
+        newFiles?.map((file) => (
           <div key={file.url} className="imageContainer">
             {/* eslint-disable-next-line @next/next/no-img-element*/}
             <NextImage
@@ -122,13 +143,16 @@ const MasonryContainer = () => {
   };
 
   return (
-    <Masonry
-      breakpointCols={breakpointColumnsObj}
-      className="my-masonry-grid pt-10"
-      columnClassName="my-masonry-grid_column"
-    >
-      {masonryFiles}
-    </Masonry>
+    <>
+      <button onClick={() => fetchImages(pageToken)}>Load more</button>
+      <Masonry
+        breakpointCols={breakpointColumnsObj}
+        className="my-masonry-grid pt-10"
+        columnClassName="my-masonry-grid_column"
+      >
+        {masonryFiles}
+      </Masonry>
+    </>
   );
 };
 
