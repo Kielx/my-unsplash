@@ -123,6 +123,7 @@ const AddPhotoModal = () => {
     };
   };
 
+  //reset new file and new file label on each modal open/close
   useEffect(() => {
     setFile(null);
     setFileLabel(null);
@@ -178,7 +179,7 @@ const AddPhotoModal = () => {
                   e.preventDefault();
                   file && fileLabel && uploadHandler(file);
                 }}
-                className="p-4 bg-green-500 text-white text-center rounded-xl font-bold text-base shadow-md"
+                className="btn-primary ripple"
               >
                 Submit
               </button>

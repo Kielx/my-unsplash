@@ -87,9 +87,9 @@ const MasonryContainer = () => {
               width={`${file.metadata?.customMetadata?.width || "500"}`}
               height={`${file.metadata?.customMetadata?.height || "500"}`}
             />
-            <div className="overlay">
-              {file?.metadata?.name}
+            <div className="overlay flex flex-col place-content-between p-4">
               <button
+                className="transition-all ml-auto border-2 border-red-600 text-red-500 p-1 rounded-xl hover:bg-red-500 hover:text-white"
                 onClick={() => {
                   const storage = getStorage();
 
@@ -109,6 +109,7 @@ const MasonryContainer = () => {
               >
                 Delete
               </button>
+              <div className="text-left font-bold">{file?.metadata?.name}</div>
             </div>
           </div>
         ))

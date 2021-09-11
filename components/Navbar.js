@@ -39,7 +39,7 @@ const Navbar = () => {
         </form>
         <button
           onClick={() => dispatch(setIsOpen(true))}
-          className="ml-auto p-4 bg-green-500 text-white text-center rounded-xl font-bold text-base shadow-md"
+          className="btn-primary ml-auto ripple "
         >
           Add a photo
         </button>
@@ -51,7 +51,7 @@ const Navbar = () => {
       >
         <Image src={myUnsplashLogo} alt="my unsplash logo" />
         <Popover.Button
-          className="text-gray-800 hover:text-blue-500 transition-all "
+          className="text-gray-800 hover:text-green-600 transition-all "
           aria-label="Show menu"
         >
           <svg
@@ -106,7 +106,7 @@ const Navbar = () => {
             </form>
             <button
               onClick={() => dispatch(setIsOpen(true))}
-              className="p-4 bg-green-500 text-white text-center rounded-xl font-bold text-base"
+              className="btn-primary ripple"
             >
               Add a photo
             </button>
