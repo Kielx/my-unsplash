@@ -33,48 +33,34 @@ const MasonryContainer = () => {
     const fetchImages = async () => {
       let url;
       let result = await listAll(storageRef);
-      let urlPromises = result.items.map(
-        (imageRef) => (url = getDownloadURL(imageRef))
+      const urls = await Promise.all(
+        result.items.map((imageRef) => (url = getDownloadURL(imageRef)))
       );
-      return Promise.all(urlPromises);
-    };
+      const metadata = await Promise.all(
+        result.items.map((imageRef) => getMetadata(imageRef))
+      );
+      console.log(urls, metadata, images);
+      const images = urls.map((url, index) => ({
+        url: url.replace(
+          "https://firebasestorage.googleapis.com",
+          `https://ik.imagekit.io/u9es71stuug/tr:${
+            window.innerWidth < 525 ? "w-515" : "w-437"
+          },c-at_min,fo-auto,q-80`
+        ),
+        blur: url.replace(
+          "https://firebasestorage.googleapis.com",
+          `https://ik.imagekit.io/u9es71stuug/tr:w-2,h-2,q-2,bl-90`
+        ),
+        name: metadata[index].name,
+        size: metadata[index].size,
+        updated: metadata[index].updated,
+        customMetadata: metadata[index].customMetadata,
+      }));
 
-    //get all files metadata from firebase storage
-    const fetchMetadata = async () => {
-      let result = await listAll(storageRef);
-      let metadataPromises = result.items.map((imageRef) =>
-        getMetadata(imageRef)
-      );
-      return Promise.all(metadataPromises);
-    };
-
-    //main imageloading function
-    const loadImages = async () => {
-      const urls = await fetchImages();
-      const metadata = await fetchMetadata();
-      //maps all fetched urls and metadata to redux store
-      let images = urls.map((url, index) => {
-        return {
-          url: url.replace(
-            "https://firebasestorage.googleapis.com",
-            `https://ik.imagekit.io/u9es71stuug/tr:${
-              window.innerWidth < 525 ? "w-515" : "w-437"
-            },c-at_min,fo-auto,q-80`
-          ),
-          blur: url.replace(
-            "https://firebasestorage.googleapis.com",
-            `https://ik.imagekit.io/u9es71stuug/tr:w-10,h-10,q-10,bl-50`
-          ),
-          metadata: metadata[index],
-        };
-      });
-      images.sort(
-        (a, b) =>
-          new Date(b?.metadata?.updated) - new Date(a?.metadata?.updated)
-      );
+      images.sort((a, b) => new Date(b?.updated) - new Date(a?.updated));
       dispatch(setFiles(images));
     };
-    loadImages();
+    fetchImages();
   }, [dispatch]);
 
   //Map files
@@ -90,8 +76,8 @@ const MasonryContainer = () => {
               alt="My unsplash image"
               placeholder="blur"
               blurDataURL={file.blur}
-              width={`${file.metadata?.customMetadata?.width || "500"}`}
-              height={`${file.metadata?.customMetadata?.height || "500"}`}
+              width={`${file?.customMetadata?.width || "500"}`}
+              height={`${file?.customMetadata?.height || "500"}`}
             />
             <div className="font-montserrat overlay flex flex-col place-content-between p-4">
               <button
@@ -100,7 +86,7 @@ const MasonryContainer = () => {
                   const storage = getStorage();
 
                   // Create a reference to the file to delete
-                  const deleteRef = ref(storage, `${file?.metadata?.name}`);
+                  const deleteRef = ref(storage, `${file?.name}`);
                   // Delete the file
                   const del = () => {
                     deleteObject(deleteRef)
@@ -113,13 +99,13 @@ const MasonryContainer = () => {
                       });
                   };
                   dispatch(setIsDeleteOpen(true));
-                  dispatch(setDeleteFileName(file?.metadata?.name));
+                  dispatch(setDeleteFileName(file?.name));
                   dispatch(setRemoveFunction(del));
                 }}
               >
                 Delete
               </button>
-              <div className="text-left font-bold">{file?.metadata?.name}</div>
+              <div className="text-left font-bold">{file?.name}</div>
             </div>
           </div>
         ))

@@ -20,7 +20,7 @@ export const filesSlice = createSlice({
     },
     removeFile: (state, action) => {
       state.files = state.files.filter((currentFile) => {
-        return currentFile.metadata.name !== action.payload.metadata.name;
+        return currentFile.name !== action.payload.name;
       });
     },
   },

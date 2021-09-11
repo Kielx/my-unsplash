@@ -9,7 +9,6 @@ import {
   uploadBytesResumable,
   getStorage,
   getDownloadURL,
-  getMetadata,
 } from "firebase/storage";
 
 const AddPhotoModal = () => {
@@ -108,12 +107,11 @@ const AddPhotoModal = () => {
                   "https://firebasestorage.googleapis.com",
                   `https://ik.imagekit.io/u9es71stuug/tr:w-10,h-10,q-10,bl-50`
                 ),
-                metadata: {
-                  name: fileLabel,
-                  customMetadata: {
-                    width: metadata.customMetadata.width,
-                    height: metadata.customMetadata.height,
-                  },
+
+                name: fileLabel,
+                customMetadata: {
+                  width: metadata.customMetadata.width,
+                  height: metadata.customMetadata.height,
                 },
               })
             );
