@@ -14,12 +14,13 @@ import {
 const AddPhotoModal = () => {
   //Redux store
   const dispatch = useDispatch();
-
+  //Local state containing data for new file (new photo)
   const [file, setFile] = useState(null);
   const [fileLabel, setFileLabel] = useState("");
 
   const isAddOpen = useSelector((state) => state.modal.isAddOpen);
 
+  //Firebase initialization
   const storage = getStorage();
   const storageRef = ref(storage, `/${fileLabel}`);
 
