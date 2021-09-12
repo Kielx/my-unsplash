@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Dialog } from "@headlessui/react";
-import { useSelector, useDispatch } from "react-redux";
 import { setIsAddOpen } from "../redux/modalSlice";
+import { useSelector, useDispatch } from "react-redux";
+
 import { addFile } from "../redux/filesSlice";
 
 import {
@@ -10,6 +11,7 @@ import {
   getStorage,
   getDownloadURL,
 } from "firebase/storage";
+import Dropzone from "./Dropzone";
 
 const AddPhotoModal = () => {
   //Redux store
@@ -141,49 +143,12 @@ const AddPhotoModal = () => {
           <Dialog.Title className="text-xl font-medium mb-5">
             Add a new photo
           </Dialog.Title>
-          <form className="flex flex-col">
-            <label
-              htmlFor="label"
-              className="block text-gray-700 text-sm font-bold mb-1"
-            >
-              Label
-            </label>
-            <input
-              id="label"
-              placeholder="Enter label for your photo"
-              className="w-full text-gray-700 text-xs px-3 py-3 border border-black border-opacity-50 rounded-xl mb-5"
-              onChange={(e) => setFileLabel(e.target.value)}
-              required={true}
-            ></input>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => setFile(e.target.files[0])}
-              required={true}
-            ></input>
-            <div className="flex place-content-end space-x-4">
-              <button
-                type="submit"
-                onClick={(e) => {
-                  e.preventDefault();
-                  dispatch(setIsAddOpen(false));
-                }}
-                className="p-4 bg-transparent text-gray-400 text-center rounded-xl text-base"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                onClick={(e) => {
-                  e.preventDefault();
-                  file && fileLabel && uploadHandler(file);
-                }}
-                className="btn-primary ripple"
-              >
-                Submit
-              </button>
-            </div>
-          </form>
+
+          <Dropzone
+            uploadHandler={uploadHandler}
+            fileLabel={fileLabel}
+            setFileLabel={setFileLabel}
+          />
         </div>
       </div>
     </Dialog>

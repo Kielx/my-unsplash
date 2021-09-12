@@ -14,7 +14,6 @@ export default function Home() {
           <title>My-Unsplash</title>
           <meta name="description" content="Unsplash styled image gallery" />
         </Head>
-
         <Navbar />
         <AddPhotoModal />
         <DeletePhotoModal />
