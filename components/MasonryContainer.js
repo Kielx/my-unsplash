@@ -17,6 +17,8 @@ import {
   getMetadata,
   deleteObject,
 } from "firebase/storage";
+import LoadingSpinner from "./LoadingSpinner";
+import styles from "./MasonryContainer.module.css";
 
 const MasonryContainer = () => {
   //Masonry files contains all the mapped files that should be displayed
@@ -102,10 +104,10 @@ const MasonryContainer = () => {
       //Map each file to a jsx element
       setMasonryFiles(
         files?.map((file) => (
-          <div key={file.url} className="imageContainer">
+          <div key={file.url} className={styles.imageContainer}>
             {/* eslint-disable-next-line @next/next/no-img-element*/}
             <NextImage
-              className="nextImage shadow-sm"
+              className={`${styles.nextImage} shadow-sm"`}
               src={file.url}
               alt="My unsplash image"
               placeholder="blur"
@@ -113,7 +115,9 @@ const MasonryContainer = () => {
               width={`${file?.customMetadata?.width || "500"}`}
               height={`${file?.customMetadata?.height || "500"}`}
             />
-            <div className="font-montserrat overlay flex flex-col place-content-between p-4">
+            <div
+              className={`${styles.overlay} font-montserrat flex flex-col place-content-between p-4`}
+            >
               <button
                 className="ml-auto btn-danger"
                 onClick={() => {
@@ -157,26 +161,29 @@ const MasonryContainer = () => {
   };
 
   return (
-    <InfiniteScroll
-      dataLength={files.length}
-      next={() => fetchImages(pageToken)}
-      hasMore={pageToken === undefined ? false : true}
-      loader={<p className="text-center text-2xl">Loading...</p>}
-      endMessage={
-        <p className="text-center text-2xl">
-          <b>Yay! You have seen it all</b>
-        </p>
-      }
-    >
-      <Masonry
-        breakpointCols={breakpointColumnsObj}
-        id="masonry"
-        className="my-masonry-grid pt-10 px-5"
-        columnClassName="my-masonry-grid_column"
+    <>
+      <InfiniteScroll
+        dataLength={files.length}
+        next={() => fetchImages(pageToken)}
+        hasMore={pageToken === undefined ? false : true}
+        loader={<LoadingSpinner />}
+        endMessage={
+          <p className="text-center text-2xl">
+            <b>Yay! You have seen it all</b>
+          </p>
+        }
+        style={{ overflow: "hidden" }}
       >
-        {masonryFiles}
-      </Masonry>
-    </InfiniteScroll>
+        <Masonry
+          breakpointCols={breakpointColumnsObj}
+          id="masonry"
+          className={`${styles.myMasonryGrid} pt-10 px-5`}
+          columnClassName={styles.myMasonryGridColumn}
+        >
+          {masonryFiles}
+        </Masonry>
+      </InfiniteScroll>
+    </>
   );
 };
 
