@@ -9,7 +9,7 @@ import { Provider } from "react-redux";
 export default function Home() {
   return (
     <Provider store={store}>
-      <div className="p-5 lg:px-32 lg:py-10 w-full bg-gray-50 h-full">
+      <div className="p-5 lg:px-32 lg:py-10 w-full  h-full">
         <Head>
           <title>My-Unsplash</title>
           <meta name="description" content="Unsplash styled image gallery" />

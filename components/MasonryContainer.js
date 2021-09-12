@@ -155,8 +155,7 @@ const MasonryContainer = () => {
   //Masonry breakpoint columns object for different screen sizes
   const breakpointColumnsObj = {
     default: 3,
-    1100: 3,
-    700: 2,
+    1100: 2,
     500: 1,
   };
 
