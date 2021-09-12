@@ -17,6 +17,7 @@ import {
   getMetadata,
   deleteObject,
 } from "firebase/storage";
+import LoadingSpinner from "./LoadingSpinner";
 
 const MasonryContainer = () => {
   //Masonry files contains all the mapped files that should be displayed
@@ -157,26 +158,29 @@ const MasonryContainer = () => {
   };
 
   return (
-    <InfiniteScroll
-      dataLength={files.length}
-      next={() => fetchImages(pageToken)}
-      hasMore={pageToken === undefined ? false : true}
-      loader={<p className="text-center text-2xl">Loading...</p>}
-      endMessage={
-        <p className="text-center text-2xl">
-          <b>Yay! You have seen it all</b>
-        </p>
-      }
-    >
-      <Masonry
-        breakpointCols={breakpointColumnsObj}
-        id="masonry"
-        className="my-masonry-grid pt-10 px-5"
-        columnClassName="my-masonry-grid_column"
+    <>
+      <InfiniteScroll
+        dataLength={files.length}
+        next={() => fetchImages(pageToken)}
+        hasMore={pageToken === undefined ? false : true}
+        loader={<LoadingSpinner />}
+        endMessage={
+          <p className="text-center text-2xl">
+            <b>Yay! You have seen it all</b>
+          </p>
+        }
+        style={{ overflow: "hidden" }}
       >
-        {masonryFiles}
-      </Masonry>
-    </InfiniteScroll>
+        <Masonry
+          breakpointCols={breakpointColumnsObj}
+          id="masonry"
+          className="my-masonry-grid pt-10 px-5"
+          columnClassName="my-masonry-grid_column"
+        >
+          {masonryFiles}
+        </Masonry>
+      </InfiniteScroll>
+    </>
   );
 };
 
