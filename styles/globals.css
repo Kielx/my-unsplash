@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body,
+#__next {
+  min-width: 100%;
+  min-height: 100%;
+}
+
+body {
+  font-family: "Noto Sans", sans-serif;
+}
+
 .btn-primary {
   @apply p-4 bg-green-500 text-white text-center rounded-xl font-bold text-base shadow-sm;
   /* Ripple effect */
@@ -35,76 +46,3 @@
   background-size: 100%;
   transition: background 0s;
 }
-
-html,
-body,
-#__next {
-  min-width: 100%;
-  min-height: 100%;
-}
-
-body {
-  font-family: "Noto Sans", sans-serif;
-}
-
-.my-masonry-grid {
-  display: -webkit-box; /* Not needed if autoprefixing */
-  display: -ms-flexbox; /* Not needed if autoprefixing */
-  display: flex;
-
-  width: auto;
-  max-width: 1400px;
-  margin: auto;
-  margin-left: -30px; /* gutter size offset */
-}
-.my-masonry-grid_column {
-  padding-left: 30px; /* gutter size */
-  background-clip: padding-box;
-}
-
-/* Style your items */
-.nextImage {
-  /* change div to reference your elements you put in <Masonry> */
-  margin: auto;
-  border-radius: 15px;
-  border: 1px solid #eaeaea;
-  width: 100%;
-  object-fit: cover;
-}
-
-/* Image and overlay styles for the masonry grid items */
-/* Container needed to position the overlay. Adjust the width as needed */
-.imageContainer {
-  position: relative;
-  margin-bottom: 2rem;
-  border-radius: 15px;
-}
-
-.imageContainer > div:first-child {
-  position: static !important;
-}
-
-/* The overlay effect - lays on top of the container and over the image */
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  border-radius: 15px;
-  background: rgb(0, 0, 0);
-  background: rgba(0, 0, 0, 0.5); /* Black see-through */
-  color: #f1f1f1;
-  width: 100%;
-  height: 100%;
-  transition: 0.5s ease;
-  opacity: 0;
-  color: white;
-  font-size: 20px;
-  text-align: center;
-}
-
-/* When you mouse over the container, fade in the overlay title */
-.imageContainer:hover .overlay {
-  opacity: 1;
-}
-
-/* Image and overlay styles for the masonry grid items */
