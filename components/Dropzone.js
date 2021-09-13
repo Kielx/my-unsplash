@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setIsAddOpen } from "../redux/modalSlice";
+import { setIsAddOpen, setLoading } from "../redux/modalSlice";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import dropzonePlaceholder from "../public/dropzonePlaceholder.svg";
@@ -50,6 +50,7 @@ const Dropzone = ({ uploadHandler, fileLabel, setFileLabel }) => {
             : ""
         } transition-all w-full text-gray-700 text-xs px-3 py-3 border border-black border-opacity-50 rounded-xl mb-5`}
         onChange={(e) => setFileLabel(e.target.value)}
+        required={true}
       ></input>
       {isDragReject ? (
         <h2 className="text-red-500 dark:text-red-400 min-h-[3rem] text-center">
@@ -116,9 +117,11 @@ const Dropzone = ({ uploadHandler, fileLabel, setFileLabel }) => {
             type="submit"
             onClick={(e) => {
               e.preventDefault();
-              acceptedFiles.length > 0 &&
-                fileLabel &&
-                uploadHandler(acceptedFiles[0]);
+
+              acceptedFiles.length > 0 && fileLabel
+                ? (uploadHandler(acceptedFiles[0]),
+                  dispatch(setLoading("true")))
+                : "";
               !fileLabel
                 ? (setNoLabel(true), setTimeout(() => setNoLabel(false), 2000))
                 : setNoLabel(false);

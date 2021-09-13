@@ -65,6 +65,7 @@ const MasonryContainer = () => {
     //Map files for later use
     //TODO: Update fetched file sizes
     const images = urls.map((url, index) => ({
+      originalUrl: url,
       url: url.replace(
         "https://firebasestorage.googleapis.com",
         `https://ik.imagekit.io/u9es71stuug/tr:${
