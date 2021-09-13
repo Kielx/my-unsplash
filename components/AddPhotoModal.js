@@ -126,7 +126,6 @@ const AddPhotoModal = () => {
 
   //reset new file and new file label on each modal open/close
   useEffect(() => {
-    setFile(null);
     setFileLabel(null);
   }, [isAddOpen]);
 

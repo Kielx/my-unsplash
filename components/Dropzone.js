@@ -50,7 +50,6 @@ const Dropzone = ({ uploadHandler, fileLabel, setFileLabel }) => {
             : ""
         } transition-all w-full text-gray-700 text-xs px-3 py-3 border border-black border-opacity-50 rounded-xl mb-5`}
         onChange={(e) => setFileLabel(e.target.value)}
-        required={true}
       ></input>
       {isDragReject ? (
         <h2 className="text-red-500 dark:text-red-400 min-h-[3rem] text-center">
@@ -143,7 +142,10 @@ const Dropzone = ({ uploadHandler, fileLabel, setFileLabel }) => {
           </button>
 
           <button
-            onClick={open}
+            onClick={(e) => {
+              e.preventDefault();
+              open();
+            }}
             className="font-bold text-center bg-[#2F80ED] hover:bg-[#2666be] dark:bg-blue-500 dark:hover:bg-blue-600 transition-all rounded-[8px] p-3 text-white hover:"
           >
             Choose a file
