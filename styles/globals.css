@@ -30,6 +30,24 @@ body {
   transition: background 0s;
 }
 
+.btn-secondary {
+  @apply p-4 bg-blue-500 text-white text-center rounded-xl font-bold text-base shadow-sm;
+  /* Ripple effect */
+  background-position: center;
+  transition: background 0.5s;
+}
+
+/* Ripple effect */
+.btn-secondary:hover {
+  background: #2563eb radial-gradient(circle, transparent 1%, #2563eb 1%)
+    center/15000%;
+}
+.btn-secondary:active {
+  background-color: #a7f3d0;
+  background-size: 100%;
+  transition: background 0s;
+}
+
 .btn-danger {
   @apply p-4 bg-transparent text-red-500 text-center rounded-xl font-bold text-base shadow-sm border-2 border-red-600 hover:text-white;
   /* Ripple effect */

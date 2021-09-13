@@ -2,15 +2,25 @@
   display: -webkit-box; /* Not needed if autoprefixing */
   display: -ms-flexbox; /* Not needed if autoprefixing */
   display: flex;
-
   width: auto;
   max-width: 1400px;
   margin: auto;
   margin-left: -30px; /* gutter size offset */
 }
+
+@media (min-width: 1400px) {
+  .myMasonryGrid {
+    margin: auto;
+  }
+}
+
 .myMasonryGridColumn {
   padding-left: 30px; /* gutter size */
   background-clip: padding-box;
+}
+
+.myMasonryGridColumn:first-child {
+  //margin-left: -30px;
 }
 
 /* Style your items */
