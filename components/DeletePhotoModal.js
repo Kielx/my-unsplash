@@ -19,14 +19,14 @@ const DeletePhotoModal = () => {
       <div className="flex items-center justify-center min-h-screen">
         <Dialog.Overlay className="fixed inset-0 bg-black opacity-50" />
 
-        <div className="relative bg-white rounded-lg w-full max-w-md mx-auto p-6 flex flex-col">
-          <Dialog.Title className="text-xl font-medium mb-5">
+        <div className="relative bg-white dark:bg-dp01 rounded-lg w-full max-w-md mx-auto p-6 flex flex-col">
+          <Dialog.Title className="text-xl font-medium mb-3 dark:text-grayGray-300">
             Delete Photo
           </Dialog.Title>
           <form className="flex flex-col">
             <label
               htmlFor="confirm"
-              className="block text-gray-700 text-sm mb-1"
+              className="block text-gray-700 text-sm dark:text-grayGray-500 mb-6"
             >
               <div className="flex flex-wrap">
                 <span className="w-full">
@@ -42,7 +42,7 @@ const DeletePhotoModal = () => {
             <input
               id="confirm"
               placeholder={deleteFileName}
-              className="w-full text-gray-700 text-xs px-3 py-3 border border-black border-opacity-50 rounded-xl mb-5"
+              className="w-full text-gray-700 text-xs px-3 py-3 border border-black border-opacity-50 rounded-xl mb-5 dark:bg-dp12 dark:border-dp16 dark:text-grayGray-400"
               required={true}
               onChange={(e) => setConfirm(e.target.value)}
             ></input>
@@ -53,7 +53,7 @@ const DeletePhotoModal = () => {
                   e.preventDefault();
                   dispatch(setIsDeleteOpen(false));
                 }}
-                className="p-4 bg-transparent text-gray-400 text-center rounded-xl text-base"
+                className="transition-all hover:text-grayGray-200 p-4 bg-transparent text-gray-400 text-center rounded-xl text-base"
               >
                 Cancel
               </button>
