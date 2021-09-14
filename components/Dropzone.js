@@ -35,7 +35,7 @@ const Dropzone = ({ uploadHandler, fileLabel, setFileLabel }) => {
     <form className="flex flex-col transition-all">
       <label
         htmlFor="label"
-        className={`transition-all block text-gray-700 text-sm font-bold mb-1 ${
+        className={`transition-all block text-gray-700 dark:text-grayGray-500 text-sm font-bold mb-1 ${
           noLabel ? "text-red-500" : ""
         }`}
       >
@@ -44,11 +44,11 @@ const Dropzone = ({ uploadHandler, fileLabel, setFileLabel }) => {
       <input
         id="label"
         placeholder="Enter label for your photo"
-        className={`${
+        className={`transition-all ${
           noLabel
             ? "ring-2 ring-red-500 placeholder-red-500 border-transparent"
             : ""
-        } transition-all w-full text-gray-700 text-xs px-3 py-3 border border-black border-opacity-50 rounded-xl mb-5`}
+        } dark:bg-dp03 dark:border-dp06 active:bg-dp03 dark:text-grayGray-200 transition-all w-full text-gray-700 text-xs px-3 py-3 border border-black border-opacity-50 rounded-xl mb-5`}
         onChange={(e) => setFileLabel(e.target.value)}
         required={true}
       ></input>
@@ -109,7 +109,7 @@ const Dropzone = ({ uploadHandler, fileLabel, setFileLabel }) => {
               e.preventDefault();
               dispatch(setIsAddOpen(false));
             }}
-            className="p-4 bg-transparent text-gray-400 text-center rounded-xl text-base"
+            className="transition-all p-4 bg-transparent text-gray-400 hover:text-gray-200 text-center rounded-xl text-base"
           >
             Cancel
           </button>
