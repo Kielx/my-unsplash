@@ -43,7 +43,10 @@ const Navbar = () => {
             className="transition-all w-full text-gray-700 dark:bg-dp06 dark:text-gray-100"
           ></input>
         </form>
-        <ToggleDarkMode />
+        {/* Have to use ToggleDarkMode that way because when Next.js renders component it doesnt know the localstorage dark Mode
+        Therefore component should render only after window and thus localstorage is defined*/}
+        {typeof window !== "undefined" && <ToggleDarkMode />}
+
         <button
           onClick={() => dispatch(setIsAddOpen(true))}
           className="btn-primary ripple "
@@ -89,7 +92,9 @@ const Navbar = () => {
           leaveTo="transform scale-95 opacity-0"
         >
           <Popover.Panel className="transition-all absolute right-0 -bottom-72 z-10 w-full max-w-md bg-white dark:bg-dp06 rounded-2xl shadow-xl py-6 space-y-6 flex flex-col items-center">
-            <ToggleDarkMode />
+            {/* Have to use ToggleDarkMode that way because when Next.js renders component it doesnt know the localstorage dark Mode
+        Therefore component should render only after window and thus localstorage is defined*/}
+            {typeof window !== "undefined" && <ToggleDarkMode />}
             <form className="transition-all flex items-center bg-white dark:bg-dp12 dark:border-dp16 p-4 border border-gray-200 rounded-xl w-3/4 shadow-sm">
               <label htmlFor="search" className="mr-2">
                 <svg
