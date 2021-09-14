@@ -105,10 +105,13 @@ const MasonryContainer = () => {
       //Map each file to a jsx element
       setMasonryFiles(
         files?.map((file) => (
-          <div key={file.url} className={styles.imageContainer}>
+          <div
+            key={file.url}
+            className={`${styles.imageContainer} shadow-md dark:filter dark:brightness-[80%] dark:contrast-[1.2] transition-all`}
+          >
             {/* eslint-disable-next-line @next/next/no-img-element*/}
             <NextImage
-              className={`${styles.nextImage} shadow-sm"`}
+              className={`${styles.nextImage} "`}
               src={file.url}
               alt="My unsplash image"
               placeholder="blur"
@@ -168,7 +171,7 @@ const MasonryContainer = () => {
         hasMore={pageToken === undefined ? false : true}
         loader={<LoadingSpinner />}
         endMessage={
-          <p className="text-center text-2xl">
+          <p className="text-center text-2xl dark:text-grayGray-300">
             <b>Yay! You have seen it all</b>
           </p>
         }

@@ -151,7 +151,7 @@ const AddPhotoModal = () => {
             {
               false: (
                 <>
-                  <Dialog.Title className="text-xl">
+                  <Dialog.Title className="text-xl dark:text-grayGray-300">
                     Add a new photo
                   </Dialog.Title>
                   <Dropzone

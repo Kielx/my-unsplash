@@ -4,7 +4,7 @@ import Image from "next/image";
 const ImageUploaded = () => {
   //const uploadedImage = useSelector((state) => state.imageUpload.uploadedImage);
   //const downloadURL = useSelector((state) => state.imageUpload.downloadURL);
-  //const darkMode = useSelector((state) => state.darkMode.darkMode);
+  const darkMode = useSelector((state) => state.darkMode.darkMode);
   const files = useSelector((state) => state.files.files);
   return (
     <>
@@ -16,8 +16,7 @@ const ImageUploaded = () => {
           height="64"
           viewBox="0 0 24 24"
           strokeWidth="1"
-          //stroke={darkMode ? "#1e1e1e" : "#ffffff"}
-          stroke="#fff"
+          stroke={darkMode ? "#1e1e1e" : "#ffffff"}
           fill="#10B981"
           strokeLinecap="round"
           strokeLinejoin="round"

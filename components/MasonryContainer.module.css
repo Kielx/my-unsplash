@@ -33,6 +33,12 @@
   object-fit: cover;
 }
 
+body.dark .nextImage {
+  background-color: red;
+}
+
+body
+
 /* Image and overlay styles for the masonry grid items */
 /* Container needed to position the overlay. Adjust the width as needed */
 .imageContainer {

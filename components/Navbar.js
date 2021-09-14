@@ -1,18 +1,24 @@
 import React from "react";
 import Image from "next/image";
 import myUnsplashLogo from "../public/my_unsplash_logo.svg";
+import myUnsplashLogoWhite from "../public/my_unsplash_logo_white.svg";
+import ToggleDarkMode from "./ToggleDarkMode";
 import { Popover, Transition } from "@headlessui/react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setIsAddOpen } from "../redux/modalSlice";
 
 const Navbar = () => {
   const dispatch = useDispatch();
+  const dark = useSelector((state) => state.darkMode);
 
   return (
     <>
       <div className="hidden w-full h-24 md:flex items-center">
-        <Image src={myUnsplashLogo} alt="my unsplash logo" />
-        <form className="flex items-center bg-white p-4 border border-gray-200 rounded-xl w-1/2 xl:w-1/5 ml-8">
+        <Image
+          src={dark.darkMode === true ? myUnsplashLogoWhite : myUnsplashLogo}
+          alt="my unsplash logo"
+        />
+        <form className="shadow-sm transition-all flex items-center bg-white dark:bg-dp06 dark:border-dp16 p-4 border border-gray-200 rounded-xl w-1/2 xl:w-1/5 ml-8">
           <label htmlFor="search" className="mr-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -34,12 +40,13 @@ const Navbar = () => {
           <input
             id="search"
             placeholder="Search by name"
-            className="w-full text-gray-700"
+            className="transition-all w-full text-gray-700 dark:bg-dp06 dark:text-gray-100"
           ></input>
         </form>
+        <ToggleDarkMode />
         <button
           onClick={() => dispatch(setIsAddOpen(true))}
-          className="btn-primary ml-auto ripple "
+          className="btn-primary ripple "
         >
           Add a photo
         </button>
@@ -49,9 +56,12 @@ const Navbar = () => {
         className=" md:hidden  relative flex w-full  justify-between "
         style={{ zIndex: "2" }}
       >
-        <Image src={myUnsplashLogo} alt="my unsplash logo" />
+        <Image
+          src={dark.darkMode === true ? myUnsplashLogoWhite : myUnsplashLogo}
+          alt="my unsplash logo"
+        />
         <Popover.Button
-          className="text-gray-800 hover:text-green-600 transition-all "
+          className="text-gray-800 hover:text-green-600 transition-all dark:text-grayGray-500"
           aria-label="Show menu"
         >
           <svg
@@ -78,8 +88,9 @@ const Navbar = () => {
           leaveFrom="transform scale-100 opacity-100"
           leaveTo="transform scale-95 opacity-0"
         >
-          <Popover.Panel className="absolute right-0 -bottom-60 z-10 w-full max-w-md bg-white rounded-2xl shadow-xl py-6 space-y-6 flex flex-col items-center">
-            <form className="flex items-center bg-white p-4 border border-gray-200 rounded-xl w-3/4">
+          <Popover.Panel className="transition-all absolute right-0 -bottom-72 z-10 w-full max-w-md bg-white dark:bg-dp06 rounded-2xl shadow-xl py-6 space-y-6 flex flex-col items-center">
+            <ToggleDarkMode />
+            <form className="transition-all flex items-center bg-white dark:bg-dp12 dark:border-dp16 p-4 border border-gray-200 rounded-xl w-3/4 shadow-sm">
               <label htmlFor="search" className="mr-2">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -101,7 +112,7 @@ const Navbar = () => {
               <input
                 id="search"
                 placeholder="Search by name"
-                className="w-full text-gray-700"
+                className="transition-all w-full text-gray-700 dark:bg-dp12 dark:text-grayGray-100"
               ></input>
             </form>
             <button
