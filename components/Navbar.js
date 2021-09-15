@@ -11,6 +11,7 @@ import { setSearchTerm } from "../redux/filesSlice";
 const Navbar = () => {
   const dispatch = useDispatch();
   const dark = useSelector((state) => state.darkMode);
+  const searchTerm = useSelector((state) => state.files.searchTerm);
   return (
     <>
       <div className="hidden w-full h-24 md:flex items-center">
@@ -124,6 +125,7 @@ const Navbar = () => {
                 id="search"
                 placeholder="Search by name"
                 className="transition-all w-full text-gray-700 dark:bg-dp12 dark:text-grayGray-100"
+                value={searchTerm}
               ></input>
             </form>
             <button
