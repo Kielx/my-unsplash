@@ -118,6 +118,9 @@ const Navbar = () => {
                 </svg>
               </label>
               <input
+                onChange={(e) => {
+                  dispatch(setSearchTerm(e.target.value));
+                }}
                 id="search"
                 placeholder="Search by name"
                 className="transition-all w-full text-gray-700 dark:bg-dp12 dark:text-grayGray-100"
