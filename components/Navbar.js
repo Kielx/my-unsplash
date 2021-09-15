@@ -6,11 +6,11 @@ import ToggleDarkMode from "./ToggleDarkMode";
 import { Popover, Transition } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsAddOpen } from "../redux/modalSlice";
+import { setSearchTerm } from "../redux/filesSlice";
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const dark = useSelector((state) => state.darkMode);
-
   return (
     <>
       <div className="hidden w-full h-24 md:flex items-center">
@@ -38,6 +38,9 @@ const Navbar = () => {
             </svg>
           </label>
           <input
+            onChange={(e) => {
+              dispatch(setSearchTerm(e.target.value));
+            }}
             id="search"
             placeholder="Search by name"
             className="transition-all w-full text-gray-700 dark:bg-dp06 dark:text-gray-100"
