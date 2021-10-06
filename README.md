@@ -18,7 +18,11 @@ My-Unsplash is a modern image gallery where anyone can upload photos. The app di
 ## Overview
 
 The project was a challenge from [devchallenges.io](https://devchallenges.io/challenges/rYyhwJAxMfES5jNQ9YsP).
-The project incorporates the Image Uploader component from [Image-Uploader](https://github.com/Kielx/image-uploader)
+It incorporates the Image Uploader component from [Image-Uploader](https://github.com/Kielx/image-uploader)
+
+<div align="center">
+<img alt="Screenshot" src="https://github.com/Kielx/my-unsplash/blob/master/public/My-Unsplash-ss.png?raw=true" />
+</div>
 
 ### The challenge
 
