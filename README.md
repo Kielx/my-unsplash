@@ -1,5 +1,5 @@
 <div align="center">
-<img alt="logo" src="https://github.com/Kielx/my-unsplash/blob/master/public/My-Unsplash-logos_transparent.png?raw=true" width="250" height="250" />
+<img alt="logo" src="https://github.com/Kielx/my-unsplash/blob/master/public/My-Unsplash-logos_transparent.png?raw=true" />
 </div>
 
 My-Unsplash is a modern image gallery where anyone can upload photos. The app displays them in a modern masonry layout. The app is built using Next.js with a backend hosted at firebase storage. The state is stored in the redux toolkit store. With dark mode, TailwindCSS, and responsive layout.
