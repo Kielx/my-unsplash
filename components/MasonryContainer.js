@@ -13,6 +13,7 @@ import {
   getStorage,
   ref,
   list,
+  listAll,
   getDownloadURL,
   getMetadata,
   deleteObject,
@@ -26,6 +27,7 @@ const MasonryContainer = () => {
   //Redux store
   const dispatch = useDispatch();
   const files = useSelector((state) => state.files.files);
+  const searchTerm = useSelector((state) => state.files.searchTerm);
 
   //init firebase storage
   const storage = getStorage();
@@ -55,6 +57,7 @@ const MasonryContainer = () => {
     } else {
       return;
     }
+    console.log(result);
     //For each file in the result, get the download url and metadata
     const urls = await Promise.all(
       result.items.map((imageRef) => (url = getDownloadURL(imageRef)))
@@ -104,57 +107,67 @@ const MasonryContainer = () => {
 
       //Map each file to a jsx element
       setMasonryFiles(
-        files?.map((file) => (
-          <div
-            key={file.url}
-            className={`${styles.imageContainer} shadow-md dark:filter dark:brightness-[80%] dark:contrast-[1.2] transition-all`}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element*/}
-            <NextImage
-              className={`${styles.nextImage} "`}
-              src={file.url}
-              alt="My unsplash image"
-              placeholder="blur"
-              blurDataURL={file.blur}
-              width={`${file?.customMetadata?.width || "500"}`}
-              height={`${file?.customMetadata?.height || "500"}`}
-            />
+        files
+          ?.filter((currentFile) => {
+            if (searchTerm === "") {
+              return true;
+            } else {
+              return currentFile.name
+                .toLowerCase()
+                .includes(searchTerm.toLowerCase());
+            }
+          })
+          .map((file) => (
             <div
-              className={`${styles.overlay} font-montserrat flex flex-col place-content-between p-4`}
+              key={file.url}
+              className={`${styles.imageContainer} shadow-md dark:filter dark:brightness-[80%] dark:contrast-[1.2] transition-all`}
             >
-              <button
-                className="ml-auto btn-danger"
-                onClick={() => {
-                  const storage = getStorage();
-
-                  // Create a reference to the file to delete
-                  const deleteRef = ref(storage, `${file?.name}`);
-                  // Delete the file
-                  const del = () => {
-                    deleteObject(deleteRef)
-                      .then(() => {
-                        //remove file from
-                        dispatch(removeFile(file));
-                      })
-                      .catch((error) => {
-                        // Uh-oh, an error occurred!
-                      });
-                  };
-                  //Send data to modal to be displayed
-                  dispatch(setIsDeleteOpen(true));
-                  dispatch(setDeleteFileName(file?.name));
-                  dispatch(setRemoveFunction(del));
-                }}
+              {/* eslint-disable-next-line @next/next/no-img-element*/}
+              <NextImage
+                className={`${styles.nextImage} "`}
+                src={file.url}
+                alt="My unsplash image"
+                placeholder="blur"
+                blurDataURL={file.blur}
+                width={`${file?.customMetadata?.width || "500"}`}
+                height={`${file?.customMetadata?.height || "500"}`}
+              />
+              <div
+                className={`${styles.overlay} font-montserrat flex flex-col place-content-between p-4`}
               >
-                Delete
-              </button>
-              <div className="text-left font-bold">{file?.name}</div>
+                <button
+                  className="ml-auto btn-danger"
+                  onClick={() => {
+                    const storage = getStorage();
+
+                    // Create a reference to the file to delete
+                    const deleteRef = ref(storage, `${file?.name}`);
+                    // Delete the file
+                    const del = () => {
+                      deleteObject(deleteRef)
+                        .then(() => {
+                          //remove file from
+                          dispatch(removeFile(file));
+                        })
+                        .catch((error) => {
+                          // Uh-oh, an error occurred!
+                        });
+                    };
+                    //Send data to modal to be displayed
+                    dispatch(setIsDeleteOpen(true));
+                    dispatch(setDeleteFileName(file?.name));
+                    dispatch(setRemoveFunction(del));
+                  }}
+                >
+                  Delete
+                </button>
+                <div className="text-left font-bold">{file?.name}</div>
+              </div>
             </div>
-          </div>
-        ))
+          ))
       );
     }
-  }, [dispatch, files]);
+  }, [dispatch, files, searchTerm]);
 
   //Masonry breakpoint columns object for different screen sizes
   const breakpointColumnsObj = {
@@ -165,18 +178,29 @@ const MasonryContainer = () => {
 
   return (
     <>
-      <InfiniteScroll
-        dataLength={files.length}
-        next={() => fetchImages(pageToken)}
-        hasMore={pageToken === undefined ? false : true}
-        loader={<LoadingSpinner />}
-        endMessage={
-          <p className="text-center text-2xl dark:text-grayGray-300">
-            <b>Yay! You have seen it all</b>
-          </p>
-        }
-        style={{ overflow: "hidden" }}
-      >
+      {!searchTerm ? (
+        <InfiniteScroll
+          dataLength={files.length}
+          next={() => fetchImages(pageToken)}
+          hasMore={pageToken === undefined ? false : true}
+          loader={<LoadingSpinner />}
+          endMessage={
+            <p className="text-center text-2xl dark:text-grayGray-300">
+              <b>Yay! You have seen it all</b>
+            </p>
+          }
+          style={{ overflow: "hidden" }}
+        >
+          <Masonry
+            breakpointCols={breakpointColumnsObj}
+            id="masonry"
+            className={`${styles.myMasonryGrid} pt-10 px-5`}
+            columnClassName={styles.myMasonryGridColumn}
+          >
+            {masonryFiles}
+          </Masonry>
+        </InfiniteScroll>
+      ) : (
         <Masonry
           breakpointCols={breakpointColumnsObj}
           id="masonry"
@@ -185,7 +209,7 @@ const MasonryContainer = () => {
         >
           {masonryFiles}
         </Masonry>
-      </InfiniteScroll>
+      )}
     </>
   );
 };

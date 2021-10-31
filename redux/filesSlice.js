@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   files: [],
+  searchTerm: "",
 };
 
 export const filesSlice = createSlice({
@@ -26,10 +27,14 @@ export const filesSlice = createSlice({
         return currentFile.name !== action.payload.name;
       });
     },
+    setSearchTerm: (state, action) => {
+      state.searchTerm = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setFiles, addFile, addFiles, removeFile } = filesSlice.actions;
+export const { setFiles, addFile, addFiles, removeFile, setSearchTerm } =
+  filesSlice.actions;
 
 export default filesSlice.reducer;
