@@ -13,6 +13,7 @@ import {
   getStorage,
   ref,
   list,
+  listAll,
   getDownloadURL,
   getMetadata,
   deleteObject,
@@ -56,6 +57,7 @@ const MasonryContainer = () => {
     } else {
       return;
     }
+    console.log(result);
     //For each file in the result, get the download url and metadata
     const urls = await Promise.all(
       result.items.map((imageRef) => (url = getDownloadURL(imageRef)))
@@ -176,18 +178,29 @@ const MasonryContainer = () => {
 
   return (
     <>
-      <InfiniteScroll
-        dataLength={files.length}
-        next={() => fetchImages(pageToken)}
-        hasMore={pageToken === undefined ? false : true}
-        loader={<LoadingSpinner />}
-        endMessage={
-          <p className="text-center text-2xl dark:text-grayGray-300">
-            <b>Yay! You have seen it all</b>
-          </p>
-        }
-        style={{ overflow: "hidden" }}
-      >
+      {!searchTerm ? (
+        <InfiniteScroll
+          dataLength={files.length}
+          next={() => fetchImages(pageToken)}
+          hasMore={pageToken === undefined ? false : true}
+          loader={<LoadingSpinner />}
+          endMessage={
+            <p className="text-center text-2xl dark:text-grayGray-300">
+              <b>Yay! You have seen it all</b>
+            </p>
+          }
+          style={{ overflow: "hidden" }}
+        >
+          <Masonry
+            breakpointCols={breakpointColumnsObj}
+            id="masonry"
+            className={`${styles.myMasonryGrid} pt-10 px-5`}
+            columnClassName={styles.myMasonryGridColumn}
+          >
+            {masonryFiles}
+          </Masonry>
+        </InfiniteScroll>
+      ) : (
         <Masonry
           breakpointCols={breakpointColumnsObj}
           id="masonry"
@@ -196,7 +209,7 @@ const MasonryContainer = () => {
         >
           {masonryFiles}
         </Masonry>
-      </InfiniteScroll>
+      )}
     </>
   );
 };

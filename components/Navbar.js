@@ -19,7 +19,7 @@ const Navbar = () => {
           src={dark.darkMode === true ? myUnsplashLogoWhite : myUnsplashLogo}
           alt="my unsplash logo"
         />
-        <form className="shadow-sm transition-all flex items-center bg-white dark:bg-dp06 dark:border-dp16 p-4 border border-gray-200 rounded-xl w-1/2 xl:w-1/5 ml-8">
+        <div className="shadow-sm transition-all flex items-center bg-white dark:bg-dp06 dark:border-dp16 p-4 border border-gray-200 rounded-xl w-1/2 xl:w-1/5 ml-8">
           <label htmlFor="search" className="mr-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -40,13 +40,15 @@ const Navbar = () => {
           </label>
           <input
             onChange={(e) => {
+              e.preventDefault();
               dispatch(setSearchTerm(e.target.value));
             }}
             id="search"
             placeholder="Search by name"
             className="transition-all w-full text-gray-700 dark:bg-dp06 dark:text-gray-100"
+            value={searchTerm}
           ></input>
-        </form>
+        </div>
         {/* Have to use ToggleDarkMode that way because when Next.js renders component it doesnt know the localstorage dark Mode
         Therefore component should render only after window and thus localstorage is defined*/}
         {typeof window !== "undefined" && <ToggleDarkMode />}
@@ -120,6 +122,7 @@ const Navbar = () => {
               </label>
               <input
                 onChange={(e) => {
+                  e.preventDefault();
                   dispatch(setSearchTerm(e.target.value));
                 }}
                 id="search"
